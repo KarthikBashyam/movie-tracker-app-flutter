@@ -30,7 +30,14 @@ class MovieListState extends State<MovieList> {
     fetchMovies().then((movies) {
       print(movies);
       this.movieList = movies;
-    }).catchError((error) {});
+    }).catchError((error) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(title: Text('Failed to load movies'));
+          });
+    });
   }
 
   Future<List<Movie>> fetchMovies() async {
