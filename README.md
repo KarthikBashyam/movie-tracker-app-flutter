@@ -1,4 +1,4 @@
-# flutter_world
+# Movie Tracker App
 
 A new Flutter project.
 
