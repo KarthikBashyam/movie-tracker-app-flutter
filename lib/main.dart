@@ -33,7 +33,7 @@ class MovieListState extends State<MovieList> {
     }).catchError((error) {
       showDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(title: Text('Failed to load movies'));
           });
@@ -43,7 +43,6 @@ class MovieListState extends State<MovieList> {
   Future<List<Movie>> fetchMovies() async {
     final response = await http.get('http://10.0.2.2:4000/movies');
     if (response.statusCode == 200) {
-      //print(json.decode(response.body));
       final movies = json.decode(response.body).cast<Map<String, dynamic>>();
       return movies.map<Movie>((json) => Movie.fromJson(json)).toList();
     } else {
@@ -56,7 +55,6 @@ class MovieListState extends State<MovieList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Movie Tracker'),
-        //actions: <Widget>[IconButton(icon: Icon(Icons.list))],
       ),
       body: buildList(),
       drawer: buildDrawer(),
