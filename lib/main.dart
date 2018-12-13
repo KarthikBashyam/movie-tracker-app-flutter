@@ -118,8 +118,6 @@ class MovieListState extends State<MovieList> {
 }
 
 class MovieList extends StatefulWidget {
-  MovieList({Key key}) : super(key: key);
-  final bloc = MovieTrackerBloc();
   @override
   State createState() {
     return MovieListState();
