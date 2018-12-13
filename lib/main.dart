@@ -5,6 +5,7 @@ import 'package:flutter_world/movie.dart';
 import 'package:flutter_world/movie_tracker_bloc_provider.dart';
 import 'package:flutter_world/movie_tracker_bloc.dart';
 import 'package:flutter_world/movie_search.dart';
+import 'package:flutter_world/loading_widget.dart';
 import 'dart:convert' show json, utf8;
 import 'dart:io';
 
@@ -46,7 +47,7 @@ class MovieListState extends State<MovieList> {
           stream: MovieTrackerBlocProvider.of(context).movies,
           builder: (context, snapshot) => snapshot.hasData
               ? buildList(snapshot.data)
-              : CircularProgressIndicator()),
+              : LoadingSpinnerWidget()),
       drawer: buildDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
