@@ -8,7 +8,7 @@ import 'package:flutter_world/movie_search.dart';
 import 'dart:convert' show json, utf8;
 import 'dart:io';
 
-void main() => runApp(MovieTrackerApp());
+void main() => runApp(MovieTrackerBlocProvider(child: MovieTrackerApp()));
 
 class MovieTrackerApp extends StatelessWidget {
   MovieTrackerApp({Key key}) : super(key: key);
@@ -43,7 +43,7 @@ class MovieListState extends State<MovieList> {
       ),
       body: StreamBuilder<List<Movie>>(
           //stream: widget.bloc.movies,
-        stream : MovieTrackerBlocProvider.of(context).movies,
+          stream: MovieTrackerBlocProvider.of(context).movies,
           builder: (context, snapshot) => snapshot.hasData
               ? buildList(snapshot.data)
               : CircularProgressIndicator()),

@@ -5,7 +5,7 @@ class MovieTrackerBlocProvider extends StatefulWidget {
   final Widget child;
   final MovieTrackerBloc bloc;
 
-  MovieTrackerBlocProvider({Key key,this.child, this.bloc}) : super(key : key);
+  MovieTrackerBlocProvider({Key key, this.child, this.bloc}) : super(key: key);
 
   static MovieTrackerBloc of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(_InheritedContainer)
@@ -20,7 +20,6 @@ class MovieTrackerBlocProvider extends StatefulWidget {
 }
 
 class _MovieTrackerProviderState extends State<MovieTrackerBlocProvider> {
-
   @override
   Widget build(BuildContext context) {
     return _InheritedContainer(bloc: widget.bloc, child: widget.child);
@@ -38,9 +37,10 @@ class _InheritedContainer extends InheritedWidget {
 
   _InheritedContainer({
     Key key,
-    this.bloc,
+    MovieTrackerBloc bloc,
     Widget child,
-  }) : super(key: key, child: child);
+  })  : this.bloc = bloc ?? MovieTrackerBloc(),
+        super(key: key, child: child);
 
   @override
   bool updateShouldNotify(_InheritedContainer oldWidget) {
