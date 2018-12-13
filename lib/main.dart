@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_world/Movie.dart';
+import 'package:flutter_world/movie.dart';
+import 'package:flutter_world/movie_tracker_bloc_provider.dart';
+import 'package:flutter_world/movie_tracker_bloc.dart';
+import 'package:flutter_world/movie_search.dart';
 import 'dart:convert' show json, utf8;
 import 'dart:io';
 
-void main() => runApp(MyApp());
+void main() => runApp(MovieTrackerApp());
 
-class MyApp extends StatelessWidget {
+class MovieTrackerApp extends StatelessWidget {
+  MovieTrackerApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,44 +23,30 @@ class MyApp extends StatelessWidget {
 }
 
 class MovieListState extends State<MovieList> {
-  List<Movie> movieList = new List<Movie>();
-
   final font = TextStyle(
     fontSize: 20.0,
   );
-
-  @override
-  void initState() {
-    fetchMovies().then((movies) {
-      print(movies);
-      this.movieList = movies;
-    }).catchError((error) {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            return AlertDialog(title: Text('Failed to load movies'));
-          });
-    });
-  }
-
-  Future<List<Movie>> fetchMovies() async {
-    final response = await http.get('http://10.0.2.2:4000/movies');
-    if (response.statusCode == 200) {
-      final movies = json.decode(response.body).cast<Map<String, dynamic>>();
-      return movies.map<Movie>((json) => Movie.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load movies');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Movie Tracker'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: MovieSearch());
+            },
+          )
+        ],
       ),
-      body: buildList(),
+      body: StreamBuilder<List<Movie>>(
+          //stream: widget.bloc.movies,
+        stream : MovieTrackerBlocProvider.of(context).movies,
+          builder: (context, snapshot) => snapshot.hasData
+              ? buildList(snapshot.data)
+              : CircularProgressIndicator()),
       drawer: buildDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
@@ -97,7 +87,7 @@ class MovieListState extends State<MovieList> {
     );
   }
 
-  Widget buildList() {
+  Widget buildList(List<Movie> movieList) {
     return ListView.builder(itemBuilder: (context, i) {
       // if (i.isOdd) return Divider();
       if (i <= movieList.length - 1) {
@@ -127,6 +117,8 @@ class MovieListState extends State<MovieList> {
 }
 
 class MovieList extends StatefulWidget {
+  MovieList({Key key}) : super(key: key);
+  final bloc = MovieTrackerBloc();
   @override
   State createState() {
     return MovieListState();
