@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_world/movie.dart';
+import 'package:flutter_world/movie_tracker_bloc_provider.dart';
 
 class MovieSearch extends SearchDelegate<Movie> {
+
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container();
+    return StreamBuilder<List<Movie>>(
+      stream: MovieTrackerBlocProvider.of(context).movies,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No Movies'),
+          );
+        } else {
+          return ListView.builder(itemBuilder: (context, i) {
+            List<Movie> movies = snapshot.data
+                .where((m) => m.name.toLowerCase().contains(query))
+                .toList();
+            if (i < movies.length) {
+              return ListTile(
+                title: Text(movies[i].name),
+              );
+            }
+          });
+        }
+      },
+    );
   }
 
   @override

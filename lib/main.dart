@@ -5,6 +5,7 @@ import 'package:flutter_world/movie.dart';
 import 'package:flutter_world/movie_tracker_bloc_provider.dart';
 import 'package:flutter_world/movie_tracker_bloc.dart';
 import 'package:flutter_world/movie_search.dart';
+import 'package:flutter_world/movie_detail.dart';
 import 'package:flutter_world/loading_widget.dart';
 import 'dart:convert' show json, utf8;
 import 'dart:io';
@@ -50,7 +51,15 @@ class MovieListState extends State<MovieList> {
               : LoadingSpinnerWidget()),
       drawer: buildDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  transform: Matrix4.identity(),
+                );
+              });
+        },
         backgroundColor: Colors.yellow,
         child: Icon(Icons.add),
       ),
@@ -90,8 +99,8 @@ class MovieListState extends State<MovieList> {
 
   Widget buildList(List<Movie> movieList) {
     return ListView.builder(itemBuilder: (context, i) {
-      // if (i.isOdd) return Divider();
-      if (i <= movieList.length - 1) {
+      // if (i.isOdd) return Divider(height: 10.0,);
+      if (i < movieList.length) {
         final movie = movieList[i];
         return buildRow(movie);
       }
@@ -102,16 +111,12 @@ class MovieListState extends State<MovieList> {
     final bool alreadyWatched = (movie.status != 'PENDING');
     return ListTile(
       title: Text(movie.name, style: font),
-      trailing: Icon(alreadyWatched ? Icons.favorite : Icons.favorite_border,
-          color: alreadyWatched ? Colors.red : null),
+      trailing: Checkbox(
+        value: false,
+      ),
       onTap: () {
-        setState(() {
-          if (alreadyWatched) {
-            //saved.remove(pair);
-          } else {
-            //saved.add(pair);
-          }
-        });
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MovieDetail(movie: movie)));
       },
     );
   }
