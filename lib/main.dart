@@ -45,7 +45,6 @@ class MovieListState extends State<MovieList> {
         ],
       ),
       body: StreamBuilder<List<Movie>>(
-          //stream: widget.bloc.movies,
           stream: MovieTrackerBlocProvider.of(context).movies,
           builder: (context, snapshot) => snapshot.hasData
               ? buildList(snapshot.data)
@@ -57,9 +56,7 @@ class MovieListState extends State<MovieList> {
               context: context,
               builder: (BuildContext context) {
                 return AddMovie();
-              }).then((response) {}).catchError((err) {
-
-          });
+              }).then((response) {}).catchError((err) {});
         },
         backgroundColor: Colors.yellow,
         child: Icon(Icons.add),
@@ -92,16 +89,19 @@ class MovieListState extends State<MovieList> {
   }
 
   Widget buildList(List<Movie> movieList) {
-    return ListView.builder(itemBuilder: (context, i) {
-      // if (i.isOdd) return Divider(height: 10.0,);
-      if (i < movieList.length) {
-        final movie = movieList[i];
-        return buildRow(movie);
-      }
-    });
+    return ListView.separated(
+        itemCount: movieList.length,
+        separatorBuilder: (BuildContext context, int index) =>
+            Divider(height: 10),
+        itemBuilder: (context, i) {
+          if (i < movieList.length) {
+            final movie = movieList[i];
+            return buildListTile(movie);
+          }
+        });
   }
 
-  Widget buildRow(Movie movie) {
+  Widget buildListTile(Movie movie) {
     return Dismissible(
       key: Key(movie.id),
       background: Container(color: Colors.yellow),
@@ -119,7 +119,6 @@ class MovieListState extends State<MovieList> {
         },
       ),
       onDismissed: (direction) {
-        print(movie.id);
         MovieTrackerBlocProvider.of(context).deleteMovie(movie.id);
       },
     );

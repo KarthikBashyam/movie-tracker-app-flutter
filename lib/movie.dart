@@ -4,7 +4,7 @@ part 'movie.g.dart';
 ///
 @JsonSerializable()
 class Movie {
-  @JsonKey(nullable: true, includeIfNull: true)
+  @JsonKey(nullable: true, includeIfNull: true, name: '_id')
   final String id;
   @JsonKey(nullable: true, includeIfNull: true)
   final String name;
