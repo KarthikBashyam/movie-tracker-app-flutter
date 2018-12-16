@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_world/movie.dart';
-import 'package:flutter_world/movie_tracker_bloc_provider.dart';
+import 'package:flutter_world/blocs/movie_tracker_bloc_provider.dart';
 
 class MovieSearch extends SearchDelegate<Movie> {
 

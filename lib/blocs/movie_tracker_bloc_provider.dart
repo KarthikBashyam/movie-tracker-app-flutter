@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_world/movie_tracker_bloc.dart';
+import 'package:flutter_world/blocs/movie_tracker_bloc.dart';
 
 class MovieTrackerBlocProvider extends StatefulWidget {
   final Widget child;

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_world/movie.dart';
-import 'package:flutter_world/movie_tracker_bloc_provider.dart';
-import 'package:flutter_world/movie_tracker_bloc.dart';
+import 'package:flutter_world/blocs/movie_tracker_bloc_provider.dart';
+import 'package:flutter_world/blocs/movie_tracker_bloc.dart';
 import 'package:flutter_world/movie_search.dart';
 import 'package:flutter_world/movie_detail.dart';
+import 'package:flutter_world/add_movie.dart';
 import 'package:flutter_world/loading_widget.dart';
 import 'dart:convert' show json, utf8;
 import 'dart:io';
@@ -55,10 +56,10 @@ class MovieListState extends State<MovieList> {
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return Container(
-                  transform: Matrix4.identity(),
-                );
-              });
+                return AddMovie();
+              }).then((response) {}).catchError((err) {
+
+          });
         },
         backgroundColor: Colors.yellow,
         child: Icon(Icons.add),
@@ -77,13 +78,6 @@ class MovieListState extends State<MovieList> {
               style: font,
             ),
             decoration: BoxDecoration(color: Colors.yellow),
-          ),
-          ListTile(
-            title: Text(
-              'Yet to Watch',
-              style: font,
-            ),
-            onTap: () {},
           ),
           ListTile(
             title: Text(
@@ -108,15 +102,25 @@ class MovieListState extends State<MovieList> {
   }
 
   Widget buildRow(Movie movie) {
-    final bool alreadyWatched = (movie.status != 'PENDING');
-    return ListTile(
-      title: Text(movie.name, style: font),
-      trailing: Checkbox(
-        value: false,
+    return Dismissible(
+      key: Key(movie.id),
+      background: Container(color: Colors.yellow),
+      child: ListTile(
+        title: Text(movie.name,
+            style: TextStyle(fontFamily: 'Corda-Regular', fontSize: 20)),
+        trailing: Checkbox(
+          value: false,
+        ),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MovieDetail(movie: movie)));
+        },
       ),
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MovieDetail(movie: movie)));
+      onDismissed: (direction) {
+        print(movie.id);
+        MovieTrackerBlocProvider.of(context).deleteMovie(movie.id);
       },
     );
   }

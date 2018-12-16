@@ -17,6 +17,18 @@ class MovieDetail extends StatelessWidget {
   }
 
   buildDetails(Movie movie) {
-
+    return Card(
+        child: ListView(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(IconData(0xeb03, fontFamily: 'director')),
+          title: Text(movie.director),
+        ),
+        ListTile(
+          leading: Icon(Icons.rate_review),
+          title: Text(movie.rating.toString()),
+        ),
+      ],
+    ));
   }
 }
