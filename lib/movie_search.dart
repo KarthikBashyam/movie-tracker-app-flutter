@@ -3,7 +3,6 @@ import 'package:flutter_world/movie.dart';
 import 'package:flutter_world/blocs/movie_tracker_bloc_provider.dart';
 
 class MovieSearch extends SearchDelegate<Movie> {
-
   @override
   Widget buildSuggestions(BuildContext context) {
     return StreamBuilder<List<Movie>>(
@@ -11,7 +10,10 @@ class MovieSearch extends SearchDelegate<Movie> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
-            child: Text('No Movies'),
+            child: Text(
+              'No Movies',
+              style: TextStyle(fontSize: 20),
+            ),
           );
         } else {
           return ListView.builder(itemBuilder: (context, i) {
