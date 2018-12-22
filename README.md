@@ -1,6 +1,6 @@
 # Movie Tracker App
 
-A new Flutter project.
+A sample Movie To-Do(To-Watch) app using Flutter , node.js and mongodb.
 
 ## Getting Started
 
